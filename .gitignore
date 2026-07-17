@@ -1,0 +1,42 @@
+# Dependency Directories
+node_modules/
+jspm_packages/
+web_modules/
+
+# Next.js Build Directories
+.next/
+out/
+
+# Python Virtual Environments & Packages
+.venv/
+venv/
+env/
+ENV/
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.ipynb_checkpoints
+.pytest_cache/
+.mypy_cache/
+.tox/
+
+# Compiled Backend Output
+dist/
+build/
+
+# Local model caches and runtime logs
+.paddleocr/
+.paddlex/
+*.log
+
+# Shared ephemeral storage (keep directory structure but ignore contents)
+shared/storage/tmp/*
+!shared/storage/tmp/.gitkeep
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

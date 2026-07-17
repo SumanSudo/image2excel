@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  ocr:
+    build:
+      context: ../services/ocr
+      dockerfile: Dockerfile
+    container_name: image2excel-ocr
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../shared/storage/tmp:/shared/storage/tmp
+      # Cache PaddleOCR models in a volume so restarts do not download them again
+      - paddle-models:/root/.paddleocr
+    environment:
+      - SHARED_STORAGE_DIR=/shared/storage/tmp
+      - PORT=8000
+    restart: always
+
+  server:
+    build:
+      context: ../
+      dockerfile: docker/backend.Dockerfile
+    container_name: image2excel-server
+    ports:
+      - "3001:3001"
+    volumes:
+      - ../shared/storage/tmp:/shared/storage/tmp
+    environment:
+      - PORT=3001
+      - SHARED_STORAGE_DIR=/shared/storage/tmp
+      - PYTHON_SERVICE_URL=http://ocr:8000
+    depends_on:
+      - ocr
+    restart: always
+
+  web:
+    build:
+      context: ../
+      dockerfile: docker/frontend.Dockerfile
+    container_name: image2excel-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1
+    depends_on:
+      - server
+    restart: always
+
+volumes:
+  paddle-models:
